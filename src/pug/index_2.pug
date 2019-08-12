@@ -1,0 +1,21 @@
+extends templates/template.pug
+
+block variables
+  - var pageTitle = "Second page"
+
+block append main
+  h2 second page
+
+  include templates/header.pug
+  main
+    h2 hello
+
+    img(width="300" src="img/img.jpg" alt="#")
+
+    svg(width="300" role="img")
+      use(xlink:href="#cat-logo")
+
+    a(href="index.html") first page
+
+  include templates/footer.pug
+  

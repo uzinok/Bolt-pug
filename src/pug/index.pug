@@ -1,0 +1,22 @@
+extends templates/template.pug
+
+block variables
+  //- переменная
+  - var pageTitle = "Main page"
+
+block main
+  h2 index.html
+
+  include templates/header.pug
+  main
+    h2 hello
+
+    img(width="300" src="img/img.jpg" alt="#")
+
+    svg(width="300" role="img")
+      use(xlink:href="#cat-logo")
+
+    a(href="index_2.html") second page
+
+  include templates/footer.pug
+  

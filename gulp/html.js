@@ -3,17 +3,6 @@ var gulp = require("gulp"),
     pug = require("gulp-pug"),
     notify = require("gulp-notify");
 
-// gulp.task("html", function () {
-//   return gulp.src("src/*.html")
-//     .pipe(posthtml([
-//       include()
-//     ]))
-//     .pipe(htmlmin({
-//       collapseWhitespace: true
-//     }))
-//     .pipe(gulp.dest("build"));
-// });
-
 gulp.task("html", function () {
   return gulp.src("src/pug/*.pug")
     .pipe(plumber({

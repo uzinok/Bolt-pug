@@ -3,7 +3,8 @@ var gulp = require("gulp"),
     less = require("gulp-less"),
     autoprefixer = require('gulp-autoprefixer'),
     csso = require("gulp-csso"),
-    notify = require("gulp-notify");
+    notify = require("gulp-notify"),
+    sourcemaps = require('gulp-sourcemaps');
 
 
 gulp.task("less", function () {
@@ -16,11 +17,13 @@ gulp.task("less", function () {
         }
       })
     }))
+    .pipe(sourcemaps.init())
     .pipe(less())
     .pipe(autoprefixer({
       grid: true,
       overrideBrowserslist: ['last 10 versions']
     }))
     .pipe(csso())
+    .pipe(sourcemaps.write())
     .pipe(gulp.dest("build/css"));
 });

@@ -14,7 +14,6 @@ gulp.task("server", function () {
   gulp.watch("src/less/**/*.less", gulp.series("less")).on("change", server.reload);
   gulp.watch("src/pug/**/*.pug", gulp.series("html")).on("change", server.reload);
   gulp.watch("src/js/*.js", gulp.series("js")).on("change", server.reload);
-  // gulp.watch("src/template/*.html", gulp.series("html")).on("change", server.reload);
   gulp.watch("src/img/*.+(svg|png|jpg|webp)", gulp.series("copy")).on("change", server.reload);
 });
 

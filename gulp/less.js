@@ -29,3 +29,5 @@ gulp.task("less", function () {
     .pipe(gulp.dest("build/css"))
     .pipe(server.stream());
 });
+
+// В зависимости от операционной системы уведомления от notify могут не отображаться на рабочем столе

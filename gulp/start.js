@@ -1,5 +1,5 @@
 var gulp = require("gulp"),
-    server = require("browser-sync").create();
+    server = require("browser-sync");
 
 gulp.task("server", function () {
   server.init({
@@ -11,11 +11,11 @@ gulp.task("server", function () {
     ui: false
   });
 
-  gulp.watch("src/less/**/*.less", gulp.series("less")).on("change", server.reload);
+  gulp.watch("src/less/**/*.less", gulp.series("less")).on("change", server.stream);
   gulp.watch("src/pug/**/*.pug", gulp.series("html")).on("change", server.reload);
   gulp.watch("src/js/*.js", gulp.series("js")).on("change", server.reload);
   gulp.watch("src/img/*.+(svg|png|jpg|webp)", gulp.series("copy")).on("change", server.reload);
 });
 
 gulp.task("build", gulp.series("clean", "copy", "copy_script", "less", "js", "html",));
-gulp.task("default", gulp.series("build", "server"));
+gulp.task("default", gulp.series("server", "build"));

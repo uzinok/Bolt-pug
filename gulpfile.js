@@ -139,13 +139,6 @@ exports.htmlTo = htmlTo;
 //       }
 //     }))
 //     .pipe(sourcemaps.init())
-//     .pipe(minify({
-//       ext: {
-//         src: '.js',
-//         min: '.min.js'
-//       },
-//       exclude: ['tasks']
-//     }))
 //     .pipe(sourcemaps.write())
 //     .pipe(dest('build/js'))
 //     .pipe(browserSync.stream());

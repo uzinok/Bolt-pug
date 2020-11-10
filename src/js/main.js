@@ -1,3 +1,1 @@
-window.onload = () => {
-  // alert('hi')
-};
+window.onload = () => {};

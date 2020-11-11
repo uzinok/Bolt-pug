@@ -1,1 +1,3 @@
-window.onload = () => {};
+import {asd} from './func';
+
+asd();

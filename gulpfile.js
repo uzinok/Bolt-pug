@@ -78,7 +78,7 @@ const lessToCss = () => {
     .pipe(less())
     .pipe(autoprefixer({
       grid: true,
-      overrideBrowserslist: ['last 10 versions']
+      overrideBrowserslist: ['last 5 versions']
     }))
     .pipe(gcmq())
     .pipe(csso())
@@ -110,42 +110,8 @@ exports.htmlTo = htmlTo;
 /**
  * scripts
  */
-const scripts = () => {
-  return src('./src/js/main.js')
-    .pipe(plumber({
-      errorHandler: notify.onError(function (err) {
-        return {
-          title: 'js',
-          message: err.message
-        }
-      })
-    }))
-    .pipe(webpackStream({
-      output: {
-        filename: 'main.js',
-      },
-      module: {
-        rules: [{
-          test: /\.m?js$/,
-          exclude: /(node_modules|bower_components)/,
-          use: {
-            loader: 'babel-loader',
-            options: {
-              presets: ['@babel/preset-env']
-            }
-          }
-        }]
-      }
-    }))
-    .pipe(sourcemaps.init())
-    .pipe(sourcemaps.write())
-    .pipe(dest('build/js'))
-    .pipe(browserSync.stream());
-}
-exports.scripts = scripts;
-
 // const scripts = () => {
-//   return src('src/js/*.js')
+//   return src('./src/js/main.js')
 //     .pipe(plumber({
 //       errorHandler: notify.onError(function (err) {
 //         return {
@@ -154,25 +120,59 @@ exports.scripts = scripts;
 //         }
 //       })
 //     }))
-//     .pipe(sourcemaps.init())
-//     .pipe(concat('main.js', {
-//       newLine: ';'
-//     }))
-//     .pipe(babel({
-//       presets: ['@babel/preset-env']
-//     }))
-//     .pipe(minify({
-//       ext: {
-//         src: '.js',
-//         min: '.min.js'
+//     .pipe(webpackStream({
+//       output: {
+//         filename: 'main.js',
 //       },
-//       exclude: ['tasks']
+//       module: {
+//         rules: [{
+//           test: /\.m?js$/,
+//           exclude: /(node_modules|bower_components)/,
+//           use: {
+//             loader: 'babel-loader',
+//             options: {
+//               presets: ['@babel/preset-env']
+//             }
+//           }
+//         }]
+//       }
 //     }))
+//     .pipe(sourcemaps.init())
 //     .pipe(sourcemaps.write())
 //     .pipe(dest('build/js'))
 //     .pipe(browserSync.stream());
 // }
 // exports.scripts = scripts;
+
+const scripts = () => {
+  return src('src/js/*.js')
+    .pipe(plumber({
+      errorHandler: notify.onError(function (err) {
+        return {
+          title: 'js',
+          message: err.message
+        }
+      })
+    }))
+    .pipe(sourcemaps.init())
+    .pipe(concat('main.js', {
+      newLine: ';'
+    }))
+    .pipe(babel({
+      presets: ['@babel/preset-env']
+    }))
+    .pipe(minify({
+      ext: {
+        src: '.js',
+        min: '.min.js'
+      },
+      exclude: ['tasks']
+    }))
+    .pipe(sourcemaps.write())
+    .pipe(dest('build/js'))
+    .pipe(browserSync.stream());
+}
+exports.scripts = scripts;
 
 /**
  * browserSync
@@ -312,27 +312,40 @@ const scriptsBuild = () => {
       },
       exclude: ['tasks']
     }))
-    .pipe(dest('build/js'))
+    .pipe(dest('build/js'));
 }
 exports.scriptsBuild = scriptsBuild;
+
+// const scriptsBuild = () => {
+//     return src('./src/js/main.js')
+//     .pipe(webpackStream({
+//       output: {
+//         filename: 'main.js',
+//       },
+//       module: {
+//         rules: [{
+//           test: /\.m?js$/,
+//           exclude: /(node_modules|bower_components)/,
+//           use: {
+//             loader: 'babel-loader',
+//             options: {
+//               presets: ['@babel/preset-env']
+//             }
+//           }
+//         }]
+//       }
+//     }))
+//     .pipe(dest('build/js'));
+// }
+// exports.scriptsBuild = scriptsBuild;
 
 /**
  * html to build
  */
 const htmlToBuild = () => {
   return src("src/pug/*.pug")
-    .pipe(plumber({
-      errorHandler: notify.onError(function (err) {
-        return {
-          title: "Pug",
-          message: err.message
-        }
-      })
-    }))
-    .pipe(pug({
-      pretty: true
-    }))
-    .pipe(dest('build'))
+    .pipe(pug())
+    .pipe(dest('build'));
 }
 exports.htmlToBuild = htmlToBuild;
 

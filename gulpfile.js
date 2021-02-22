@@ -93,7 +93,7 @@ exports.lessToCss = lessToCss;
  * html
  */
 const htmlTo = () => {
-  return src("src/pug/*.pug")
+  return src(["src/pug/*.pug", "src/less/blocks/*/*.pug"])
     .pipe(plumber({
       errorHandler: notify.onError(function (err) {
         return {
@@ -186,7 +186,7 @@ const server = () => {
   });
 
   watch('src/less/**/*.less', lessToCss);
-  watch('src/pug/**/*.pug', htmlTo);
+  watch(["src/pug/*.pug", "src/less/blocks/*/*.pug"], htmlTo);
   watch(['src/fonts/*.{woff, woff2, ttf}*', 'src/img/*.+(png|jpg|svg|webp|ico|gif|JPG)*', ], copy);
   watch('src/scripts/*.js', copy_script);
   watch('src/css/*.css', copy_css);

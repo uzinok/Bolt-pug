@@ -209,15 +209,22 @@ const imagemin = require('gulp-imagemin');
 
 
 // svg
-const sprite = () => {
-  return src(['resource/svg/*.svg'])
-    .pipe(svgstore({
-      inlineSvg: true
-    }))
-    .pipe(rename('sprite.svg'))
-    .pipe(dest('resource/svg/'));
+const setSprite = () => {
+    return src(['resource/svg/*.svg'])
+        .pipe(svgstore({
+            inlineSvg: true
+        }))
+        .pipe(rename('sprite.svg'))
+        .pipe(dest('resource/svg/'));
 }
-exports.sprite = sprite;
+exports.setSprite = setSprite;
+
+const cleanSprite = () => {
+    return del('resource/svg/sprite.svg');
+}
+exports.cleanSprite = cleanSprite;
+
+exports.sprite = series(cleanSprite, setSprite);
 
 // webp_convert
 const webp_convert = () => {

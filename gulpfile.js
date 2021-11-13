@@ -24,8 +24,6 @@ const browserSync = require('browser-sync').create();
 // error
 const plumber = require('gulp-plumber');
 const notify = require('gulp-notify');
-// map
-const sourcemaps = require('gulp-sourcemaps');
 
 /**
  * clean
@@ -75,7 +73,6 @@ const lessToCss = () => {
         }
       })
     }))
-    .pipe(sourcemaps.init())
     .pipe(less())
     .pipe(autoprefixer({
       grid: true,
@@ -83,7 +80,6 @@ const lessToCss = () => {
     }))
     .pipe(gcmq())
     .pipe(csso())
-    .pipe(sourcemaps.write())
     .pipe(dest('build/css'))
     .pipe(browserSync.stream());
 }
@@ -93,7 +89,7 @@ exports.lessToCss = lessToCss;
  * html
  */
 const htmlTo = () => {
-  return src(["src/pug/*.pug", "src/less/blocks/*/*.pug"])
+  return src(["src/pug/*.pug"])
     .pipe(plumber({
       errorHandler: notify.onError(function (err) {
         return {
@@ -102,48 +98,13 @@ const htmlTo = () => {
         }
       })
     }))
-    .pipe(pug())
+    .pipe(pug({
+      pretty: true
+    }))
     .pipe(dest('build'))
     .pipe(browserSync.stream());
 }
 exports.htmlTo = htmlTo;
-
-/**
- * scripts
- */
-// const scripts = () => {
-//   return src('./src/js/main.js')
-//     .pipe(plumber({
-//       errorHandler: notify.onError(function (err) {
-//         return {
-//           title: 'js',
-//           message: err.message
-//         }
-//       })
-//     }))
-//     .pipe(webpackStream({
-//       output: {
-//         filename: 'main.js',
-//       },
-//       module: {
-//         rules: [{
-//           test: /\.m?js$/,
-//           exclude: /(node_modules|bower_components)/,
-//           use: {
-//             loader: 'babel-loader',
-//             options: {
-//               presets: ['@babel/preset-env']
-//             }
-//           }
-//         }]
-//       }
-//     }))
-//     .pipe(sourcemaps.init())
-//     .pipe(sourcemaps.write())
-//     .pipe(dest('build/js'))
-//     .pipe(browserSync.stream());
-// }
-// exports.scripts = scripts;
 
 const scripts = () => {
   return src('src/js/*.js')
@@ -155,7 +116,6 @@ const scripts = () => {
         }
       })
     }))
-    .pipe(sourcemaps.init())
     .pipe(concat('main.js', {
       newLine: ';'
     }))
@@ -169,7 +129,6 @@ const scripts = () => {
       },
       exclude: ['tasks']
     }))
-    .pipe(sourcemaps.write())
     .pipe(dest('build/js'))
     .pipe(browserSync.stream());
 }

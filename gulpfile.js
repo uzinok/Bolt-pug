@@ -20,9 +20,14 @@ const notify = require('gulp-notify');
 
 // styles
 const less = require('gulp-less');
-const cleanCSS = require('gulp-clean-css');
-const autoprefixer = require('gulp-autoprefixer');
-const gcmq = require('gulp-group-css-media-queries');
+const autoprefixer = require('autoprefixer');
+const postcss = require('gulp-postcss');
+const postLess = require('postcss-less');
+const postImport = require('postcss-import');
+const postUrl = require('postcss-url');
+const postMediaMinMax = require('postcss-media-minmax');
+const csso = require('postcss-csso');
+
 
 // scripts
 const babel = require('gulp-babel');
@@ -91,7 +96,9 @@ function copy() {
 
 // styles
 function styles() {
-	return src(paths.styles.src)
+	return src(paths.styles.src, {
+			sourcemaps: true
+		})
 		.pipe(plumber({
 			errorHandler: notify.onError(function(err) {
 				return {
@@ -101,22 +108,28 @@ function styles() {
 				}
 			})
 		}))
-		.pipe(sourcemaps.init())
+		.pipe(postcss([
+			postImport(),
+			postUrl()
+		], {
+			syntax: postLess
+		}))
 		.pipe(plumber({
 			errorHandler: onError
 		}))
 		.pipe(less())
-		.pipe(gcmq())
-		.pipe(cleanCSS())
-		.pipe(autoprefixer({
-			overrideBrowserslist: ['last 2 versions']
-		}))
-		.pipe(sourcemaps.write('.'))
+		.pipe(postcss([
+			postMediaMinMax(),
+			csso(),
+			autoprefixer(),
+		]))
 		.pipe(rename({
 			basename: 'main',
 			suffix: '.min'
 		}))
-		.pipe(dest(paths.styles.dest))
+		.pipe(dest(paths.styles.dest, {
+			sourcemaps: "."
+		}))
 		.pipe(browserSync.stream());
 }
 

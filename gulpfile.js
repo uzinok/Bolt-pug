@@ -220,6 +220,7 @@ exports.default = series(clean, copy, parallel(scripts, styles, html), server);
  */
 // img
 const squoosh = require('gulp-libsquoosh');
+const gulpSquoosh = require("gulp-squoosh");
 const svgSprite = require('gulp-svg-sprite');
 const svgmin = require('gulp-svgmin');
 // fonts
@@ -253,8 +254,10 @@ function createWebp() {
 function createAvif() {
 	return src(paths.img.resource + "/**/*.{jpg,png}")
 		.pipe(
-			squoosh({
-				avif: {}
+			gulpSquoosh({
+				encodeOptions: {
+					avif: {}
+				}
 			})
 		)
 		.pipe(dest(paths.img.src));

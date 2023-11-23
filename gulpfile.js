@@ -10,8 +10,6 @@ const {
 const del = require('del');
 // rename
 const rename = require('gulp-rename');
-// sourcemaps
-const sourcemaps = require('gulp-sourcemaps');
 // browserSync
 const browserSync = require('browser-sync').create();
 // error
@@ -19,13 +17,14 @@ const plumber = require('gulp-plumber');
 const notify = require('gulp-notify');
 
 // styles
-const less = require('gulp-less');
+const sass = require('gulp-sass')(require('sass'));
 const autoprefixer = require('autoprefixer');
+const gcmq = require('gulp-group-css-media-queries');
+
 const postcss = require('gulp-postcss');
-const postLess = require('postcss-less');
+const postScss = require('postcss-scss');
 const postImport = require('postcss-import');
 const postUrl = require('postcss-url');
-const postMediaMinMax = require('postcss-media-minmax');
 const csso = require('postcss-csso');
 
 
@@ -40,8 +39,8 @@ const paths = {
 	dest: 'dest',
 	src: 'src',
 	styles: {
-		src: 'src/styles/*.less',
-		watch: 'src/styles/**/*.less',
+		src: 'src/styles/*.scss',
+		watch: 'src/styles/**/*.scss',
 		dest: 'dest/styles/'
 	},
 	scripts: {
@@ -112,16 +111,16 @@ function styles() {
 			postImport(),
 			postUrl()
 		], {
-			syntax: postLess
+			syntax: postScss
 		}))
 		.pipe(plumber({
 			errorHandler: onError
 		}))
-		.pipe(less())
+		.pipe(sass().on('error', sass.logError))
+		.pipe(gcmq())
 		.pipe(postcss([
-			postMediaMinMax(),
-			csso(),
 			autoprefixer(),
+			csso()
 		]))
 		.pipe(rename({
 			basename: 'main',

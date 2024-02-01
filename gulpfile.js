@@ -56,7 +56,7 @@ const paths = {
 	img: {
 		resource: './src/resource/img',
 		resourceSvg: './src/resource/svg',
-		src: './src/img',
+		src: './src/',
 	},
 	fonts: {
 		src: './src/fonts',
@@ -199,7 +199,7 @@ export function createRastr() {
 }
 
 export function optiImg() {
-	return src([`${paths.img.src} + "/**/*.{png,jpg,svg}`, `!${paths.img.src} sprite.svg`], {
+	return src([paths.img.src + "/**/*.{png,jpg,svg}", `!${paths.img.src} sprite.svg`], {
 			base: paths.src
 		})
 		.pipe(imagemin([
